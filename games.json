@@ -1,0 +1,32 @@
+[
+  {
+    "id": "z3ma-imposter",
+    "name": "Z3MA Imposter",
+    "description": "لعبة جماعية للتخمين والخداع والضحك مع الأصحاب.",
+    "version": "v1.0.0",
+    "size": "APK",
+    "price": "مجاني",
+    "icon": "assets/z3ma-imposter.png",
+    "download": "https://github.com/aekarfi14-jpg/z3ma-imposter/releases/download/v1.0.0/app-debug.apk",
+    "features": [
+      "لعب جماعي",
+      "أدوار سرية",
+      "مناسبة للأصحاب والعائلة"
+    ]
+  },
+  {
+    "id": "arfi-chaplen",
+    "name": "Arfi Chaplen",
+    "description": "لعبة تمثيل وتخمين جماعية بطابع جزائري.",
+    "version": "v1.0",
+    "size": "APK",
+    "price": "مجاني",
+    "icon": "assets/arfi-chaplen.png",
+    "download": "https://github.com/aekarfi14-jpg/my-app-releases/releases/download/v1.0/app-debug.apk",
+    "features": [
+      "فرق ولاعبون",
+      "كلمات متنوعة",
+      "لعب جماعي"
+    ]
+  }
+]
