@@ -1,103 +1,225 @@
+/* =========================================================
+   نظام التصميم — Tokens
+   لون: خلفية كحلية داكنة + توهج سماوي/بنفسجي مزدوج
+   خط: Tajawal بأوزان متعددة
+========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
 :root {
-  --bg: #0b100c;
-  --card: #151c16;
-  --card2: #1c251e;
-  --text: #f4f7f4;
-  --muted: #9aa69c;
-  --accent: #b9f36b;
-  --border: rgba(255,255,255,.08);
+  --bg: #060810;
+  --surface: #0e1420;
+  --surface-2: #131a2c;
+  --border: rgba(255, 255, 255, .08);
+  --border-strong: rgba(255, 255, 255, .14);
+
+  --text: #eef1f7;
+  --muted: #8b93a8;
+
+  --accent: #45e3ff;
+  --accent-ink: #06141c;
+  --accent-2: #8c6bff;
+  --gold: #ffd166;
+
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 11px;
+
+  --shadow-card: 0 24px 60px rgba(0, 0, 0, .45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 50% -10%, #29402b 0%, transparent 45%),
+    radial-gradient(760px 420px at 12% -8%, rgba(69, 227, 255, .16), transparent 60%),
+    radial-gradient(680px 420px at 100% 0%, rgba(140, 107, 255, .14), transparent 55%),
     var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+  font-family: "Tajawal", system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* =========================================================
+   Header
+========================================================= */
+
 .site-header {
-  padding: 50px 20px 25px;
+  padding: 22px 20px;
+  border-bottom: 1px solid var(--border);
 }
 
 .header-inner {
-  max-width: 1050px;
+  max-width: 1080px;
   margin: auto;
-  display: flex;
-  align-items: center;
-  gap: 17px;
 }
 
-.brand-icon {
-  width: 65px;
-  height: 65px;
-  border-radius: 20px;
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.brand-mark {
   display: grid;
   place-items: center;
-  background: var(--accent);
-  font-size: 32px;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  color: var(--accent-ink);
+  background: linear-gradient(150deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 22px rgba(69, 227, 255, .25);
 }
 
-h1 {
-  margin: 0;
-  font-size: 40px;
+.brand-word {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: .2px;
 }
 
-.site-header p {
-  margin: 3px 0;
-  color: var(--muted);
-}
+/* =========================================================
+   Hero
+========================================================= */
 
-main {
-  max-width: 1050px;
+.hero {
+  position: relative;
+  max-width: 1080px;
   margin: auto;
-  padding: 10px 20px 70px;
+  padding: 56px 20px 34px;
+  text-align: center;
+  overflow: hidden;
 }
 
-.intro {
-  margin: 25px 0 30px;
+.hero-glow {
+  position: absolute;
+  inset: -40% -10% auto -10%;
+  height: 320px;
+  background:
+    radial-gradient(320px 200px at 30% 30%, rgba(69, 227, 255, .22), transparent 70%),
+    radial-gradient(320px 200px at 75% 40%, rgba(140, 107, 255, .20), transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.intro span {
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 3px;
+.hero > * {
+  position: relative;
+  z-index: 1;
 }
 
-.intro h2 {
-  margin: 8px 0;
-  font-size: 38px;
-}
-
-.intro p {
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 18px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .04);
   color: var(--muted);
-  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
 }
+
+.hero-badge span:last-child {
+  color: var(--text);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(69, 227, 255, .6);
+  animation: pulse 2.2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(69, 227, 255, .55); }
+  70% { box-shadow: 0 0 0 9px rgba(69, 227, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(69, 227, 255, 0); }
+}
+
+.hero h1 {
+  margin: 0 0 14px;
+  font-size: clamp(28px, 5.4vw, 44px);
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.hero-sub {
+  max-width: 560px;
+  margin: auto;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* =========================================================
+   قسم الألعاب
+========================================================= */
 
 .games {
+  max-width: 1080px;
+  margin: auto;
+  padding: 10px 20px 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: 1fr;
   gap: 22px;
 }
 
+@media (min-width: 720px) {
+  .games {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 26px;
+  }
+}
+
 .game-card {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(145deg, var(--card2), var(--card));
+  background: linear-gradient(175deg, var(--surface-2), var(--surface));
   border: 1px solid var(--border);
-  border-radius: 25px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: transform .25s ease, border-color .25s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
 }
 
 .game-image {
-  aspect-ratio: 1 / 1;
+  position: relative;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
-  background: #080b09;
+  background: #060a12;
 }
 
 .game-image img {
@@ -107,147 +229,266 @@ main {
   display: block;
 }
 
+.game-badge {
+  position: absolute;
+  top: 14px;
+  inset-inline-start: 14px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgba(6, 8, 16, .55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.game-image::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(6, 8, 16, .55), transparent);
+  pointer-events: none;
+}
+
 .game-content {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 22px;
 }
 
 .game-content h3 {
   margin: 0;
-  font-size: 25px;
+  font-size: 22px;
+  font-weight: 800;
 }
 
 .description {
   color: var(--muted);
-  line-height: 1.7;
-  min-height: 55px;
+  font-size: 14.5px;
+  line-height: 1.8;
+  margin: 8px 0 0;
 }
 
 .meta {
   display: flex;
   gap: 7px;
   flex-wrap: wrap;
-  margin: 15px 0;
+  margin: 16px 0 0;
 }
 
 .meta span {
-  background: rgba(255,255,255,.06);
-  padding: 6px 10px;
-  border-radius: 9px;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid var(--border);
+  padding: 5px 11px;
+  border-radius: 999px;
   font-size: 12px;
-  color: #d1d8d2;
+  color: #cdd4e2;
 }
 
 .features {
   padding: 0;
+  margin: 16px 0 0;
   list-style: none;
-  color: #cbd3cc;
-  line-height: 1.9;
+  color: #cdd4e2;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .features li::before {
-  content: "✓";
-  color: var(--accent);
-  margin-left: 8px;
-  font-weight: 900;
+  content: "";
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-top: 4px;
+  border-radius: 5px;
+  background: linear-gradient(150deg, var(--accent), var(--accent-2));
 }
 
 .actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
-  margin-top: 18px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: 0;
-  border-radius: 12px;
-  padding: 13px;
+  border-radius: var(--radius-sm);
+  padding: 14px;
   text-decoration: none;
   text-align: center;
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
+  transition: transform .15s ease, filter .15s ease;
+}
+
+.btn:active {
+  transform: scale(.97);
 }
 
 .download {
-  background: var(--accent);
-  color: #111;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink);
+  box-shadow: 0 14px 30px rgba(69, 227, 255, .18);
+}
+
+.download:hover {
+  filter: brightness(1.06);
 }
 
 .qr {
-  background: rgba(255,255,255,.08);
-  color: white;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+}
+
+.qr:hover {
+  background: rgba(255, 255, 255, .1);
 }
 
 .link-box {
   display: flex;
-  margin-top: 9px;
+  margin-top: 2px;
 }
 
 .link-box input {
   flex: 1;
   min-width: 0;
   border: 1px solid var(--border);
-  background: #090d0a;
-  color: #78847b;
-  padding: 10px;
+  background: #080b14;
+  color: #7d869c;
+  padding: 11px 12px;
   direction: ltr;
-  border-radius: 10px 0 0 10px;
-  font-size: 10px;
+  text-align: left;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-size: 11.5px;
+  font-family: inherit;
 }
 
 .copy {
-  border: 0;
-  padding: 0 13px;
-  background: #29332b;
-  color: white;
-  border-radius: 0 10px 10px 0;
+  border: 1px solid var(--border);
+  border-right: 0;
+  padding: 0 16px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  cursor: pointer;
 }
 
-/* التقييم العام */
+html[dir="rtl"] .link-box input {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+html[dir="rtl"] .copy {
+  border-right: 1px solid var(--border);
+  border-left: 0;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+/* =========================================================
+   حالة التحميل (Skeleton)
+========================================================= */
+
+.skeleton-card {
+  aspect-ratio: 3 / 4.6;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(100deg, var(--surface) 30%, var(--surface-2) 50%, var(--surface) 70%);
+  background-size: 220% 100%;
+  animation: shimmer 1.5s infinite;
+  border: 1px solid var(--border);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -20% 0; }
+}
+
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 20px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+}
+
+/* =========================================================
+   التقييم العام
+========================================================= */
 
 .rating-box {
-  max-width: 650px;
-  margin: 55px auto 0;
-  padding: 28px;
+  max-width: 640px;
+  margin: 20px auto 0;
+  padding: 30px 26px;
   border: 1px solid var(--border);
-  border-radius: 24px;
-  background: linear-gradient(145deg, var(--card2), var(--card));
+  border-radius: var(--radius-lg);
+  background: linear-gradient(175deg, var(--surface-2), var(--surface));
   text-align: center;
 }
 
 .rating-box h2 {
   margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 800;
 }
 
 .rating-box > p {
   color: var(--muted);
+  margin: 0;
+  font-size: 14.5px;
 }
 
 .stars {
   direction: ltr;
   display: flex;
   justify-content: center;
-  gap: 5px;
-  margin: 20px 0 8px;
+  gap: 4px;
+  margin: 22px 0 6px;
 }
 
 .stars button {
   border: 0;
   background: transparent;
-  color: #4b554d;
-  font-size: 38px;
+  color: #444d63;
+  font-size: 36px;
   cursor: pointer;
   padding: 0 4px;
-  transition: .15s;
+  line-height: 1;
+  transition: transform .15s ease, color .15s ease;
+}
+
+.stars button:hover {
+  transform: translateY(-2px);
 }
 
 .stars button.active {
-  color: #ffd54a;
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(255, 209, 102, .45);
 }
 
 .rate-thanks {
-  min-height: 22px;
+  min-height: 20px;
   color: var(--accent) !important;
+  font-size: 13.5px;
+  font-weight: 700;
 }
 
 #rateComment {
@@ -255,11 +496,13 @@ main {
   width: 100%;
   resize: vertical;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   padding: 13px;
-  background: #090d0a;
-  color: white;
+  margin-top: 4px;
+  background: #080b14;
+  color: var(--text);
   font-family: inherit;
+  font-size: 14px;
 }
 
 #rateComment.show {
@@ -269,13 +512,15 @@ main {
 .send-rating {
   display: none;
   width: 100%;
-  margin-top: 10px;
-  padding: 13px;
+  margin-top: 12px;
+  padding: 14px;
   border: 0;
-  border-radius: 12px;
-  background: #29332b;
-  color: white;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink);
+  font-family: inherit;
   font-weight: 800;
+  font-size: 15px;
   cursor: pointer;
 }
 
@@ -284,17 +529,39 @@ main {
 }
 
 .send-rating:disabled {
-  opacity: .6;
+  opacity: .55;
+  cursor: default;
+  background: rgba(255, 255, 255, .1);
+  color: var(--muted);
 }
+
+/* =========================================================
+   Footer
+========================================================= */
 
 footer {
-  padding: 30px;
+  padding: 34px 20px 44px;
   text-align: center;
   color: var(--muted);
+  font-size: 13.5px;
   border-top: 1px solid var(--border);
+  margin-top: 20px;
 }
 
-/* QR */
+.footer-brand {
+  color: var(--text);
+  font-weight: 800;
+  font-size: 15px;
+  margin: 0 0 4px;
+}
+
+footer p {
+  margin: 4px 0;
+}
+
+/* =========================================================
+   QR Modal
+========================================================= */
 
 .modal {
   position: fixed;
@@ -303,7 +570,8 @@ footer {
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(0,0,0,.8);
+  background: rgba(3, 5, 10, .78);
+  backdrop-filter: blur(4px);
 }
 
 .modal.hidden {
@@ -312,16 +580,34 @@ footer {
 
 .modal-card {
   position: relative;
-  padding: 25px;
-  border-radius: 22px;
-  background: #161d17;
+  width: 100%;
+  max-width: 320px;
+  padding: 28px 24px 24px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(175deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
   text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.modal-card h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.qr-game-name {
+  margin: 0 0 18px;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
 }
 
 #qrCode {
+  display: inline-block;
   background: white;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
 }
 
 #qrCode img,
@@ -330,37 +616,37 @@ footer {
   margin: auto;
 }
 
+.qr-hint {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .close {
   position: absolute;
-  top: 5px;
-  left: 10px;
-  border: 0;
-  background: transparent;
-  color: white;
-  font-size: 30px;
+  top: 10px;
+  inset-inline-start: 12px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .05);
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1;
   cursor: pointer;
 }
 
-.loading {
-  text-align: center;
-  color: var(--muted);
-  padding: 30px;
-}
+/* =========================================================
+   استجابة الشاشات الصغيرة
+========================================================= */
 
-@media (max-width: 550px) {
-  h1 {
-    font-size: 32px;
-  }
-
-  .intro h2 {
-    font-size: 30px;
-  }
-
-  .actions {
-    grid-template-columns: 1fr;
+@media (max-width: 520px) {
+  .hero {
+    padding: 44px 18px 26px;
   }
 
   .rating-box {
-    padding: 20px 15px;
+    padding: 24px 18px;
   }
 }

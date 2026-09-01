@@ -1,7 +1,9 @@
 const gamesContainer = document.getElementById("games");
+const gamesCount = document.getElementById("gamesCount");
 
 const qrModal = document.getElementById("qrModal");
 const qrCode = document.getElementById("qrCode");
+const qrGameName = document.getElementById("qrGameName");
 const closeQr = document.getElementById("closeQr");
 
 const stars = document.querySelectorAll("#stars button");
@@ -67,9 +69,11 @@ async function loadGames() {
 
       card.innerHTML = `
         <div class="game-image">
+          <span class="game-badge">${escapeHTML(game.price)}</span>
           <img
             src="${escapeHTML(game.icon)}"
-            alt="${escapeHTML(game.name)}">
+            alt="${escapeHTML(game.name)}"
+            loading="lazy">
         </div>
 
         <div class="game-content">
@@ -104,21 +108,24 @@ async function loadGames() {
 
             <button
               class="btn qr"
-              data-download="${escapeHTML(game.download)}">
-              QR للتحميل
+              type="button"
+              data-download="${escapeHTML(game.download)}"
+              data-name="${escapeHTML(game.name)}">
+              عرض QR للتحميل
             </button>
 
-          </div>
+            <div class="link-box">
 
-          <div class="link-box">
+              <input
+                value="${escapeHTML(game.download)}"
+                readonly
+                aria-label="رابط تحميل ${escapeHTML(game.name)}">
 
-            <input
-              value="${escapeHTML(game.download)}"
-              readonly>
+              <button class="copy" type="button">
+                نسخ
+              </button>
 
-            <button class="copy">
-              نسخ
-            </button>
+            </div>
 
           </div>
 
@@ -128,11 +135,19 @@ async function loadGames() {
       gamesContainer.appendChild(card);
     });
 
+    if (gamesCount) {
+      gamesCount.textContent = games.length;
+    }
+
     setupGameButtons();
 
   } catch (error) {
 
     console.error(error);
+
+    if (gamesCount) {
+      gamesCount.textContent = "0";
+    }
 
     gamesContainer.innerHTML = `
       <div class="loading">
@@ -185,6 +200,11 @@ function setupGameButtons() {
       button.addEventListener("click", () => {
 
         const url = button.dataset.download;
+        const name = button.dataset.name || "";
+
+        if (qrGameName) {
+          qrGameName.textContent = name;
+        }
 
         qrCode.innerHTML = "";
 
@@ -192,7 +212,7 @@ function setupGameButtons() {
           text: url,
           width: 190,
           height: 190,
-          colorDark: "#101b12",
+          colorDark: "#060810",
           colorLight: "#ffffff",
           correctLevel: QRCode.CorrectLevel.H
         });
@@ -384,6 +404,18 @@ closeQr.addEventListener("click", () => {
 qrModal.addEventListener("click", event => {
 
   if (event.target === qrModal) {
+    qrModal.classList.add("hidden");
+  }
+
+});
+
+
+document.addEventListener("keydown", event => {
+
+  if (
+    event.key === "Escape" &&
+    !qrModal.classList.contains("hidden")
+  ) {
     qrModal.classList.add("hidden");
   }
 

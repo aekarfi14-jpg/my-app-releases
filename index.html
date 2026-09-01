@@ -3,55 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101510">
+  <meta name="theme-color" content="#060810">
+  <meta name="description" content="ألعابي — حمّل ألعابي الجماعية والعبها مع أصحابك، مجانًا وبدون حسابات.">
 
   <title>ألعابي</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="site-header">
+<header class="site-header" id="top">
   <div class="header-inner">
-    <div class="brand-icon">🎮</div>
-
-    <div>
-      <h1>ألعابي</h1>
-      <p>ألعاب جماعية من صنعي</p>
-    </div>
+    <a class="brand" href="#top" aria-label="ألعابي — الصفحة الرئيسية">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="22" height="22" fill="none">
+          <path d="M24 4 L42 15 V33 L24 44 L6 33 V15 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M24 16 L33 21 V29 L24 34 L15 29 V21 Z" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-word">ألعابي</span>
+    </a>
   </div>
 </header>
 
 <main>
 
-  <section class="intro">
-    <span>MY GAMES</span>
-    <h2>اختار لعبتك</h2>
-    <p>
-      حمّل اللعبة وجربها مع صحابك وعائلتك.
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+
+    <p class="hero-badge">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <span><span id="gamesCount">…</span> لعبة متاحة الآن</span>
+    </p>
+
+    <h1>اختار لعبتك، وابدأ اللعب</h1>
+
+    <p class="hero-sub">
+      ألعاب جماعية بسيطة صنعتها بنفسي. تحميل مباشر، بدون حسابات ولا اشتراكات.
     </p>
   </section>
 
-  <section id="games" class="games">
-    <div class="loading">جاري تحميل الألعاب...</div>
+  <section id="games" class="games" aria-live="polite">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
   </section>
 
   <!-- التقييم العام للموقع والألعاب -->
   <section class="rating-box">
 
-    <h2>جربت الألعاب؟ رأيك يهمني ⭐</h2>
+    <h2>جربت الألعاب؟ رأيك يهمني</h2>
 
     <p>
       قيّم الألعاب وشاركنا انطباعك، رأيك يساعدني نطوّرها أكثر.
     </p>
 
-    <div id="stars" class="stars">
-      <button data-value="1">★</button>
-      <button data-value="2">★</button>
-      <button data-value="3">★</button>
-      <button data-value="4">★</button>
-      <button data-value="5">★</button>
+    <div id="stars" class="stars" role="group" aria-label="تقييم من خمس نجوم">
+      <button type="button" data-value="1" aria-label="نجمة واحدة">★</button>
+      <button type="button" data-value="2" aria-label="نجمتان">★</button>
+      <button type="button" data-value="3" aria-label="ثلاث نجوم">★</button>
+      <button type="button" data-value="4" aria-label="أربع نجوم">★</button>
+      <button type="button" data-value="5" aria-label="خمس نجوم">★</button>
     </div>
 
     <p id="rateThanks" class="rate-thanks"></p>
@@ -61,7 +77,7 @@
       placeholder="أضف تعليقك (اختياري)..."
       rows="4"></textarea>
 
-    <button id="rateSend" class="send-rating">
+    <button id="rateSend" type="button" class="send-rating">
       إرسال التقييم
     </button>
 
@@ -70,22 +86,23 @@
 </main>
 
 <footer>
-  <p>ألعابي 🎮</p>
-  <p>كل الألعاب مجانية</p>
+  <p class="footer-brand">ألعابي</p>
+  <p>كل الألعاب هنا مجانية بالكامل</p>
 </footer>
 
 <!-- نافذة QR -->
-<div id="qrModal" class="modal hidden">
+<div id="qrModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="qrGameName">
 
   <div class="modal-card">
 
-    <button id="closeQr" class="close">×</button>
+    <button id="closeQr" type="button" class="close" aria-label="إغلاق">×</button>
 
     <h3>رمز التحميل</h3>
+    <p id="qrGameName" class="qr-game-name"></p>
 
     <div id="qrCode"></div>
 
-    <p>امسح الرمز لتحميل اللعبة</p>
+    <p class="qr-hint">امسح الرمز بكاميرا هاتفك لتحميل اللعبة</p>
 
   </div>
 
