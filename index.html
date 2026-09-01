@@ -3,63 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#060810">
-  <meta name="description" content="ألعابي — حمّل ألعابي الجماعية والعبها مع أصحابك، مجانًا وبدون حسابات.">
+  <meta name="theme-color" content="#17161a">
+  <meta name="description" content="ألعابي — كتالوج صغير لألعاب صنعتها بنفسي، جاهزة للتحميل والتجربة مباشرة.">
 
   <title>ألعابي</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="site-header" id="top">
-  <div class="header-inner">
-    <a class="brand" href="#top" aria-label="ألعابي — الصفحة الرئيسية">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48" width="22" height="22" fill="none">
-          <path d="M24 4 L42 15 V33 L24 44 L6 33 V15 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
-          <path d="M24 16 L33 21 V29 L24 34 L15 29 V21 Z" fill="currentColor"/>
-        </svg>
-      </span>
-      <span class="brand-word">ألعابي</span>
-    </a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <span class="wordmark">ألعابي</span>
   </div>
 </header>
 
-<main>
+<main class="wrap">
 
-  <section class="hero">
-    <div class="hero-glow" aria-hidden="true"></div>
-
-    <p class="hero-badge">
-      <span class="pulse-dot" aria-hidden="true"></span>
-      <span><span id="gamesCount">…</span> لعبة متاحة الآن</span>
-    </p>
-
-    <h1>اختار لعبتك، وابدأ اللعب</h1>
-
-    <p class="hero-sub">
-      ألعاب جماعية بسيطة صنعتها بنفسي. تحميل مباشر، بدون حسابات ولا اشتراكات.
+  <section class="intro">
+    <h1>ألعاب صغيرة، صنعتها بنفسي</h1>
+    <p class="intro-text">
+      هون تلقى <span id="gamesCount">…</span> جاهزة للتحميل والتجربة مباشرة،
+      بدون تسجيل دخول ولا اشتراكات.
     </p>
   </section>
 
-  <section id="games" class="games" aria-live="polite">
-    <div class="skeleton-card"></div>
-    <div class="skeleton-card"></div>
+  <section class="list-section">
+    <h2 class="list-title">الألعاب</h2>
+
+    <div id="games" class="games" aria-live="polite">
+      <div class="skeleton-row"></div>
+      <div class="skeleton-row"></div>
+    </div>
   </section>
 
   <!-- التقييم العام للموقع والألعاب -->
-  <section class="rating-box">
+  <section class="rating-section">
 
-    <h2>جربت الألعاب؟ رأيك يهمني</h2>
-
-    <p>
-      قيّم الألعاب وشاركنا انطباعك، رأيك يساعدني نطوّرها أكثر.
+    <h2>جربت الألعاب؟</h2>
+    <p class="rating-text">
+      رأيك يساعدني أطوّرها أكثر، تقييم واحد بيكفي.
     </p>
 
     <div id="stars" class="stars" role="group" aria-label="تقييم من خمس نجوم">
@@ -75,9 +63,9 @@
     <textarea
       id="rateComment"
       placeholder="أضف تعليقك (اختياري)..."
-      rows="4"></textarea>
+      rows="3"></textarea>
 
-    <button id="rateSend" type="button" class="send-rating">
+    <button id="rateSend" type="button" class="btn btn-primary send-rating">
       إرسال التقييم
     </button>
 
@@ -85,9 +73,8 @@
 
 </main>
 
-<footer>
-  <p class="footer-brand">ألعابي</p>
-  <p>كل الألعاب هنا مجانية بالكامل</p>
+<footer class="wrap">
+  <p>ألعابي — كل الألعاب هنا مجانية بالكامل</p>
 </footer>
 
 <!-- نافذة QR -->
@@ -95,12 +82,12 @@
 
   <div class="modal-card">
 
-    <button id="closeQr" type="button" class="close" aria-label="إغلاق">×</button>
+    <button id="closeQr" type="button" class="modal-close" aria-label="إغلاق">×</button>
 
     <h3>رمز التحميل</h3>
     <p id="qrGameName" class="qr-game-name"></p>
 
-    <div id="qrCode"></div>
+    <div id="qrCode" class="qr-box"></div>
 
     <p class="qr-hint">امسح الرمز بكاميرا هاتفك لتحميل اللعبة</p>
 

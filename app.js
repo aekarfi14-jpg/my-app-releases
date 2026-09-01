@@ -63,80 +63,74 @@ async function loadGames() {
 
     games.forEach(game => {
 
-      const card = document.createElement("article");
+      const row = document.createElement("article");
 
-      card.className = "game-card";
+      row.className = "game-row";
 
-      card.innerHTML = `
-        <div class="game-image">
-          <span class="game-badge">${escapeHTML(game.price)}</span>
-          <img
-            src="${escapeHTML(game.icon)}"
-            alt="${escapeHTML(game.name)}"
-            loading="lazy">
+      const featuresText = (game.features || [])
+        .map(feature => escapeHTML(feature))
+        .join("، ");
+
+      row.innerHTML = `
+        <div class="game-head">
+
+          <div class="game-icon">
+            <img
+              src="${escapeHTML(game.icon)}"
+              alt="${escapeHTML(game.name)}"
+              loading="lazy">
+          </div>
+
+          <div class="game-heading">
+            <h3>${escapeHTML(game.name)}</h3>
+            <p class="game-desc">${escapeHTML(game.description)}</p>
+          </div>
+
         </div>
 
-        <div class="game-content">
+        <div class="game-meta">
+          <span>${escapeHTML(game.version)}</span>
+          <span>${escapeHTML(game.size)}</span>
+          <span>${escapeHTML(game.price)}</span>
+        </div>
 
-          <h3>${escapeHTML(game.name)}</h3>
-
-          <p class="description">
-            ${escapeHTML(game.description)}
+        ${featuresText ? `
+          <p class="game-features">
+            <b>أبرز المميزات:</b> ${featuresText}
           </p>
+        ` : ""}
 
-          <div class="meta">
-            <span>${escapeHTML(game.version)}</span>
-            <span>${escapeHTML(game.size)}</span>
-            <span>${escapeHTML(game.price)}</span>
-          </div>
+        <div class="game-actions">
 
-          <ul class="features">
-            ${(game.features || [])
-              .map(feature =>
-                `<li>${escapeHTML(feature)}</li>`
-              )
-              .join("")}
-          </ul>
+          <a
+            class="btn btn-primary"
+            href="${escapeHTML(game.download)}">
+            تحميل اللعبة
+          </a>
 
-          <div class="actions">
+          <button
+            class="btn btn-ghost qr-btn"
+            type="button"
+            data-download="${escapeHTML(game.download)}"
+            data-name="${escapeHTML(game.name)}">
+            QR
+          </button>
 
-            <a
-              class="btn download"
-              href="${escapeHTML(game.download)}">
-              تحميل اللعبة
-            </a>
-
-            <button
-              class="btn qr"
-              type="button"
-              data-download="${escapeHTML(game.download)}"
-              data-name="${escapeHTML(game.name)}">
-              عرض QR للتحميل
-            </button>
-
-            <div class="link-box">
-
-              <input
-                value="${escapeHTML(game.download)}"
-                readonly
-                aria-label="رابط تحميل ${escapeHTML(game.name)}">
-
-              <button class="copy" type="button">
-                نسخ
-              </button>
-
-            </div>
-
-          </div>
+          <button
+            class="btn btn-ghost copy-btn"
+            type="button"
+            data-url="${escapeHTML(game.download)}">
+            نسخ الرابط
+          </button>
 
         </div>
       `;
 
-      gamesContainer.appendChild(card);
+      gamesContainer.appendChild(row);
     });
 
     if (gamesCount) {
-      gamesCount.textContent = games.length;
+      gamesCount.textContent = `${games.length} ألعاب`;
     }
 
     setupGameButtons();
@@ -146,7 +140,7 @@ async function loadGames() {
     console.error(error);
 
     if (gamesCount) {
-      gamesCount.textContent = "0";
+      gamesCount.textContent = "0 ألعاب";
     }
 
     gamesContainer.innerHTML = `
@@ -164,29 +158,42 @@ async function loadGames() {
 
 function setupGameButtons() {
 
-  document.querySelectorAll(".copy")
+  document.querySelectorAll(".copy-btn")
     .forEach(button => {
 
       button.addEventListener("click", async () => {
 
-        const input =
-          button.parentElement.querySelector("input");
+        const url = button.dataset.url || "";
 
         try {
 
-          await navigator.clipboard.writeText(input.value);
+          await navigator.clipboard.writeText(url);
 
         } catch {
 
-          input.select();
+          const helper = document.createElement("textarea");
+
+          helper.value = url;
+          helper.style.position = "fixed";
+          helper.style.opacity = "0";
+
+          document.body.appendChild(helper);
+
+          helper.focus();
+          helper.select();
+
           document.execCommand("copy");
 
+          helper.remove();
+
         }
+
+        const originalText = "نسخ الرابط";
 
         button.textContent = "تم النسخ";
 
         setTimeout(() => {
-          button.textContent = "نسخ";
+          button.textContent = originalText;
         }, 1800);
 
       });
@@ -210,9 +217,9 @@ function setupGameButtons() {
 
         new QRCode(qrCode, {
           text: url,
-          width: 190,
-          height: 190,
-          colorDark: "#060810",
+          width: 180,
+          height: 180,
+          colorDark: "#17161a",
           colorLight: "#ffffff",
           correctLevel: QRCode.CorrectLevel.H
         });
