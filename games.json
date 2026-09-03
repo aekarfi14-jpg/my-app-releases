@@ -28,5 +28,20 @@
       "كلمات متنوعة",
       "لعب جماعي"
     ]
+  },
+  {
+    "id": "choser",
+    "name": "شوزر",
+    "description": "لعبة شبابية للصراحة والجرأة، بعدد كبير من اللاعبين وفئات متنوعة.",
+    "version": "V0",
+    "size": "APK",
+    "price": "مجاني",
+    "icon": "assets/Sraha(1).jpg",
+    "download": "https://github.com/aekarfi14-jpg/Choser/releases/download/V0/Choser.apk",
+    "features": [
+      "صراحة وجرأة",
+      "عدد كبير من اللاعبين",
+      "فئات متنوعة"
+    ]
   }
 ]
