@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#17161a">
-  <meta name="description" content="ألعابي — كتالوج صغير لألعاب صنعتها بنفسي، جاهزة للتحميل والتجربة مباشرة.">
+  <meta name="description" content="حمّل ألعاب سهرة وألعاب عائلية ممتعة للعب مع الأصدقاء والعائلة. ألعاب APK مجانية بالكامل، بدون تسجيل دخول ولا اشتراكات، تحميل مباشر وسهل.">
 
-  <title>ألعابي</title>
+  <title>ألعابي - ألعاب سهرة وعائلية للأصدقاء | تحميل مباشر APK</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,9 +14,7 @@
 
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <header class="site-header">
   <div class="wrap header-inner">
     <span class="wordmark">ألعابي</span>
@@ -26,15 +24,19 @@
 <main class="wrap">
 
   <section class="intro">
-    <h1>ألعاب صغيرة، صنعتها بنفسي</h1>
+    <h1>ألعاب سهرة وعائلية، صنعتها بنفسي</h1>
     <p class="intro-text">
       هون تلقى <span id="gamesCount">…</span> جاهزة للتحميل والتجربة مباشرة،
       بدون تسجيل دخول ولا اشتراكات.
     </p>
+    <p class="intro-text">
+      مجموعة ألعاب سهرة وألعاب عائلية مثالية لقضاء وقت ممتع مع الأصدقاء والعائلة.
+      كل لعبة متوفرة كملف APK للتحميل المباشر على هاتفك، بدون الحاجة لمتجر تطبيقات.
+    </p>
   </section>
 
   <section class="list-section">
-    <h2 class="list-title">الألعاب</h2>
+    <h2 class="list-title">ألعاب سهرة وعائلية</h2>
 
     <div id="games" class="games" aria-live="polite">
       <div class="skeleton-row"></div>
@@ -60,21 +62,18 @@
 
     <p id="rateThanks" class="rate-thanks"></p>
 
-    <textarea
-      id="rateComment"
+    <textarea id="rateComment"
       placeholder="أضف تعليقك (اختياري)..."
       rows="3"></textarea>
 
     <button id="rateSend" type="button" class="btn btn-primary send-rating">
       إرسال التقييم
     </button>
-
   </section>
-
 </main>
 
 <footer class="wrap">
-  <p>ألعابي — كل الألعاب هنا مجانية بالكامل</p>
+  <p>ألعابي — ألعاب سهرة وعائلية، كل الألعاب هنا مجانية بالكامل</p>
 </footer>
 
 <!-- نافذة QR -->
@@ -90,18 +89,14 @@
     <div id="qrCode" class="qr-box"></div>
 
     <p class="qr-hint">امسح الرمز بكاميرا هاتفك لتحميل اللعبة</p>
-
   </div>
-
 </div>
-
 <!-- يبقى مخفياً حتى لا يغادر المستخدم الموقع عند إرسال التقييم -->
 <iframe
   name="hidden_review_frame"
   id="hiddenReviewFrame"
   style="display:none;">
 </iframe>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="app.js"></script>
 
