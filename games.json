@@ -49,5 +49,22 @@
       "عدد كبير من اللاعبين",
       "فئات متنوعة"
     ]
+  },
+  {
+    "id": "wdnin",
+    "name": "WDNIN",
+    "description": "لعبة جماعية عكسية للصوت والتخمين والضحك مع الأصحاب.",
+    "version": "V0.0.1",
+    "size": "APK",
+    "price": "مجاني",
+    "icon": "assets/wdnin.png",
+    "repo": "aekarfi14-jpg/Wdnin",
+    "asset": "WDNIN.apk",
+    "download": "https://github.com/aekarfi14-jpg/Wdnin/releases/download/V0.0.1/WDNIN.apk",
+    "features": [
+      "لعب جماعي",
+      "تسجيل وعكس الصوت",
+      "مناسبة للأصحاب"
+    ]
   }
 ]
