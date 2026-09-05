@@ -7,6 +7,8 @@
     "size": "APK",
     "price": "مجاني",
     "icon": "assets/z3ma-imposter.png",
+    "repo": "aekarfi14-jpg/z3ma-imposter",
+    "asset": "app-debug.apk",
     "download": "https://github.com/aekarfi14-jpg/z3ma-imposter/releases/download/v1.0.0/app-debug.apk",
     "features": [
       "لعب جماعي",
@@ -18,11 +20,13 @@
     "id": "arfi-chaplen",
     "name": "Arfi Chaplen",
     "description": "لعبة تمثيل وتخمين جماعية بطابع جزائري.",
-    "version": "v1.0",
+    "version": "v1.0.0",
     "size": "APK",
     "price": "مجاني",
     "icon": "assets/arfi-chaplen.png",
-    "download": "https://github.com/aekarfi14-jpg/my-app-releases/releases/download/v1.0/app-debug.apk",
+    "repo": "aekarfi14-jpg/Arfi-chaplen",
+    "asset": "app-debug.apk",
+    "download": "https://github.com/aekarfi14-jpg/Arfi-chaplen/releases/download/v1.0.0/app-debug.apk",
     "features": [
       "فرق ولاعبون",
       "كلمات متنوعة",
@@ -37,6 +41,8 @@
     "size": "APK",
     "price": "مجاني",
     "icon": "assets/Sraha(1).jpg",
+    "repo": "aekarfi14-jpg/Choser",
+    "asset": "Choser.apk",
     "download": "https://github.com/aekarfi14-jpg/Choser/releases/download/V0/Choser.apk",
     "features": [
       "صراحة وجرأة",
