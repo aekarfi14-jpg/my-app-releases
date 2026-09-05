@@ -31,6 +31,11 @@ const RATED_VALUE_KEY = "games_site_rated_value";
 
 let selectedRating = 0;
 
+
+/* =========================
+   أدوات
+========================= */
+
 function escapeHTML(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -38,6 +43,136 @@ function escapeHTML(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+
+/*
+ * تحويل حجم الملف إلى MB بشكل مرتب
+ */
+function formatFileSize(bytes) {
+  if (!bytes || Number(bytes) <= 0) {
+    return null;
+  }
+
+  const mb = Number(bytes) / (1024 * 1024);
+
+  if (mb >= 1) {
+    return `${mb.toFixed(1)} MB`;
+  }
+
+  const kb = Number(bytes) / 1024;
+
+  return `${kb.toFixed(0)} KB`;
+}
+
+
+/* =========================
+   تحديث معلومات اللعبة من GitHub
+========================= */
+
+/*
+ * Arfi Chaplen:
+ * ممنوع عليه التحديث التلقائي.
+ *
+ * يبقى دائمًا على الرابط الموجود
+ * في games.json.
+ */
+async function getGameInfo(game) {
+
+  if (game.id === "arfi-chaplen") {
+    return game;
+  }
+
+  /*
+   * إذا ماكانش repo أو asset
+   * نستعمل البيانات الأصلية.
+   */
+  if (!game.repo || !game.asset) {
+    return game;
+  }
+
+  try {
+
+    const apiUrl =
+      `https://api.github.com/repos/${game.repo}/releases/latest`;
+
+    const response = await fetch(apiUrl, {
+      cache: "no-store",
+      headers: {
+        "Accept": "application/vnd.github+json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `GitHub API error: ${response.status}`
+      );
+    }
+
+    const release = await response.json();
+
+    /*
+     * حماية إضافية:
+     * لا نستعمل Draft أو Pre-release.
+     */
+    if (
+      release.draft ||
+      release.prerelease
+    ) {
+      return game;
+    }
+
+    /*
+     * البحث عن ملف APK المحدد في games.json
+     */
+    const asset = (release.assets || []).find(
+      item => item.name === game.asset
+    );
+
+    /*
+     * إذا ما لقيناش الـ APK،
+     * نرجع للمعلومات القديمة.
+     */
+    if (!asset) {
+      console.warn(
+        `APK asset "${game.asset}" not found for ${game.id}`
+      );
+
+      return game;
+    }
+
+    /*
+     * نسخة جديدة من بيانات اللعبة.
+     * لا نغيّر الاسم والوصف والصورة والمميزات.
+     */
+    const updatedGame = {
+      ...game,
+
+      version:
+        release.tag_name || game.version,
+
+      size:
+        formatFileSize(asset.size) || game.size,
+
+      download:
+        asset.browser_download_url || game.download
+    };
+
+    return updatedGame;
+
+  } catch (error) {
+
+    /*
+     * فشل GitHub API لا يوقف الموقع.
+     * نستعمل الرابط والبيانات الموجودة أصلًا.
+     */
+    console.warn(
+      `Could not update ${game.id} from GitHub:`,
+      error
+    );
+
+    return game;
+  }
 }
 
 
@@ -59,9 +194,18 @@ async function loadGames() {
 
     const games = await response.json();
 
+    /*
+     * تحديث معلومات الألعاب من GitHub.
+     *
+     * Arfi مستثناة داخل getGameInfo().
+     */
+    const updatedGames = await Promise.all(
+      games.map(game => getGameInfo(game))
+    );
+
     gamesContainer.innerHTML = "";
 
-    games.forEach(game => {
+    updatedGames.forEach(game => {
 
       const row = document.createElement("article");
 
@@ -94,11 +238,15 @@ async function loadGames() {
           <span>${escapeHTML(game.price)}</span>
         </div>
 
-        ${featuresText ? `
-          <p class="game-features">
-            <b>أبرز المميزات:</b> ${featuresText}
-          </p>
-        ` : ""}
+        ${
+          featuresText
+            ? `
+              <p class="game-features">
+                <b>أبرز المميزات:</b> ${featuresText}
+              </p>
+            `
+            : ""
+        }
 
         <div class="game-actions">
 
@@ -130,7 +278,8 @@ async function loadGames() {
     });
 
     if (gamesCount) {
-      gamesCount.textContent = `${games.length} ألعاب`;
+      gamesCount.textContent =
+        `${updatedGames.length} ألعاب`;
     }
 
     setupGameButtons();
@@ -158,76 +307,93 @@ async function loadGames() {
 
 function setupGameButtons() {
 
-  document.querySelectorAll(".copy-btn")
+  document
+    .querySelectorAll(".copy-btn")
     .forEach(button => {
 
-      button.addEventListener("click", async () => {
+      button.addEventListener(
+        "click",
+        async () => {
 
-        const url = button.dataset.url || "";
+          const url =
+            button.dataset.url || "";
 
-        try {
+          try {
 
-          await navigator.clipboard.writeText(url);
+            await navigator.clipboard.writeText(url);
 
-        } catch {
+          } catch {
 
-          const helper = document.createElement("textarea");
+            const helper =
+              document.createElement("textarea");
 
-          helper.value = url;
-          helper.style.position = "fixed";
-          helper.style.opacity = "0";
+            helper.value = url;
+            helper.style.position = "fixed";
+            helper.style.opacity = "0";
 
-          document.body.appendChild(helper);
+            document.body.appendChild(helper);
 
-          helper.focus();
-          helper.select();
+            helper.focus();
+            helper.select();
 
-          document.execCommand("copy");
+            document.execCommand("copy");
 
-          helper.remove();
+            helper.remove();
+          }
 
+          const originalText =
+            "نسخ الرابط";
+
+          button.textContent =
+            "تم النسخ";
+
+          setTimeout(() => {
+
+            button.textContent =
+              originalText;
+
+          }, 1800);
         }
-
-        const originalText = "نسخ الرابط";
-
-        button.textContent = "تم النسخ";
-
-        setTimeout(() => {
-          button.textContent = originalText;
-        }, 1800);
-
-      });
-
+      );
     });
 
 
-  document.querySelectorAll("[data-download]")
+  document
+    .querySelectorAll("[data-download]")
     .forEach(button => {
 
-      button.addEventListener("click", () => {
+      button.addEventListener(
+        "click",
+        () => {
 
-        const url = button.dataset.download;
-        const name = button.dataset.name || "";
+          const url =
+            button.dataset.download;
 
-        if (qrGameName) {
-          qrGameName.textContent = name;
+          const name =
+            button.dataset.name || "";
+
+          if (qrGameName) {
+            qrGameName.textContent =
+              name;
+          }
+
+          qrCode.innerHTML = "";
+
+          new QRCode(qrCode, {
+            text: url,
+            width: 180,
+            height: 180,
+            colorDark: "#17161a",
+            colorLight: "#ffffff",
+            correctLevel:
+              QRCode.CorrectLevel.H
+          });
+
+          qrModal.classList.remove(
+            "hidden"
+          );
         }
-
-        qrCode.innerHTML = "";
-
-        new QRCode(qrCode, {
-          text: url,
-          width: 180,
-          height: 180,
-          colorDark: "#17161a",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
-
-        qrModal.classList.remove("hidden");
-
-      });
-
+      );
     });
 }
 
@@ -247,7 +413,6 @@ function highlightStars(value) {
       "active",
       starValue <= value
     );
-
   });
 }
 
@@ -259,7 +424,11 @@ const alreadyRated =
 if (alreadyRated) {
 
   const savedValue =
-    Number(localStorage.getItem(RATED_VALUE_KEY)) || 0;
+    Number(
+      localStorage.getItem(
+        RATED_VALUE_KEY
+      )
+    ) || 0;
 
   if (savedValue) {
     highlightStars(savedValue);
@@ -279,42 +448,55 @@ if (alreadyRated) {
 
 stars.forEach(star => {
 
-  star.addEventListener("click", () => {
+  star.addEventListener(
+    "click",
+    () => {
 
-    if (
-      localStorage.getItem(RATED_KEY) === "true"
-    ) {
-      return;
+      if (
+        localStorage.getItem(
+          RATED_KEY
+        ) === "true"
+      ) {
+        return;
+      }
+
+      selectedRating =
+        Number(star.dataset.value);
+
+      highlightStars(
+        selectedRating
+      );
+
+      const messages = {
+
+        1:
+          "شكراً لملاحظتك، وين نقدر نطوّر؟",
+
+        2:
+          "شكراً لملاحظتك، وين نقدر نطوّر؟",
+
+        3:
+          "شكراً على رأيك، حاب تضيف تعليق؟",
+
+        4:
+          "يعطيك الصحة على تقييمك! حاب تضيف كلمة؟",
+
+        5:
+          "رهيب! شاركنا بكلمة على اللي عجبك 🎉"
+      };
+
+      rateThanks.textContent =
+        messages[selectedRating];
+
+      rateComment.classList.add(
+        "show"
+      );
+
+      rateSend.classList.add(
+        "show"
+      );
     }
-
-    selectedRating =
-      Number(star.dataset.value);
-
-    highlightStars(selectedRating);
-
-    const messages = {
-
-      1: "شكراً لملاحظتك، وين نقدر نطوّر؟",
-
-      2: "شكراً لملاحظتك، وين نقدر نطوّر؟",
-
-      3: "شكراً على رأيك، حاب تضيف تعليق؟",
-
-      4: "يعطيك الصحة على تقييمك! حاب تضيف كلمة؟",
-
-      5: "رهيب! شاركنا بكلمة على اللي عجبك 🎉"
-
-    };
-
-    rateThanks.textContent =
-      messages[selectedRating];
-
-    rateComment.classList.add("show");
-
-    rateSend.classList.add("show");
-
-  });
-
+  );
 });
 
 
@@ -322,111 +504,149 @@ stars.forEach(star => {
    إرسال التقييم
 ========================= */
 
-rateSend.addEventListener("click", () => {
+rateSend.addEventListener(
+  "click",
+  () => {
 
-  if (
-    !selectedRating ||
-    localStorage.getItem(RATED_KEY) === "true"
-  ) {
-    return;
+    if (
+      !selectedRating ||
+      localStorage.getItem(
+        RATED_KEY
+      ) === "true"
+    ) {
+      return;
+    }
+
+
+    const form =
+      document.createElement("form");
+
+    form.action =
+      FORM_ACTION;
+
+    form.method =
+      "POST";
+
+    form.target =
+      "hidden_review_frame";
+
+
+    const ratingInput =
+      document.createElement("input");
+
+    ratingInput.type =
+      "hidden";
+
+    ratingInput.name =
+      ENTRY_RATING;
+
+    ratingInput.value =
+      selectedRating;
+
+    form.appendChild(
+      ratingInput
+    );
+
+
+    const commentInput =
+      document.createElement("input");
+
+    commentInput.type =
+      "hidden";
+
+    commentInput.name =
+      ENTRY_COMMENT;
+
+    commentInput.value =
+      rateComment.value || "";
+
+    form.appendChild(
+      commentInput
+    );
+
+
+    document.body.appendChild(
+      form
+    );
+
+    form.submit();
+
+    form.remove();
+
+
+    /*
+     * حفظ حالة التقييم على هذا الجهاز
+     */
+
+    localStorage.setItem(
+      RATED_KEY,
+      "true"
+    );
+
+    localStorage.setItem(
+      RATED_VALUE_KEY,
+      String(selectedRating)
+    );
+
+
+    rateSend.disabled =
+      true;
+
+    rateSend.textContent =
+      "تم إرسال تقييمك، شكراً لك! 🙏";
+
+    rateComment.disabled =
+      true;
   }
-
-
-  const form =
-    document.createElement("form");
-
-  form.action = FORM_ACTION;
-
-  form.method = "POST";
-
-  form.target = "hidden_review_frame";
-
-
-  const ratingInput =
-    document.createElement("input");
-
-  ratingInput.type = "hidden";
-
-  ratingInput.name = ENTRY_RATING;
-
-  ratingInput.value = selectedRating;
-
-  form.appendChild(ratingInput);
-
-
-  const commentInput =
-    document.createElement("input");
-
-  commentInput.type = "hidden";
-
-  commentInput.name = ENTRY_COMMENT;
-
-  commentInput.value =
-    rateComment.value || "";
-
-  form.appendChild(commentInput);
-
-
-  document.body.appendChild(form);
-
-  form.submit();
-
-  form.remove();
-
-
-  /*
-   * حفظ حالة التقييم على هذا الجهاز
-   */
-
-  localStorage.setItem(
-    RATED_KEY,
-    "true"
-  );
-
-  localStorage.setItem(
-    RATED_VALUE_KEY,
-    String(selectedRating)
-  );
-
-
-  rateSend.disabled = true;
-
-  rateSend.textContent =
-    "تم إرسال تقييمك، شكراً لك! 🙏";
-
-  rateComment.disabled = true;
-
-});
+);
 
 
 /* =========================
    QR Modal
 ========================= */
 
-closeQr.addEventListener("click", () => {
-  qrModal.classList.add("hidden");
-});
+closeQr.addEventListener(
+  "click",
+  () => {
 
-
-qrModal.addEventListener("click", event => {
-
-  if (event.target === qrModal) {
-    qrModal.classList.add("hidden");
+    qrModal.classList.add(
+      "hidden"
+    );
   }
+);
 
-});
 
+qrModal.addEventListener(
+  "click",
+  event => {
 
-document.addEventListener("keydown", event => {
-
-  if (
-    event.key === "Escape" &&
-    !qrModal.classList.contains("hidden")
-  ) {
-    qrModal.classList.add("hidden");
+    if (
+      event.target === qrModal
+    ) {
+      qrModal.classList.add(
+        "hidden"
+      );
+    }
   }
+);
 
-});
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Escape" &&
+      !qrModal.classList.contains(
+        "hidden"
+      )
+    ) {
+      qrModal.classList.add(
+        "hidden"
+      );
+    }
+  }
+);
 
 
 /* =========================
